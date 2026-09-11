@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Private CampusMade listing review dashboard." />
+    <title>CampusMade Admin — Listing Review</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="admin-page">
+    <header class="site-header admin-header">
+      <a class="brand" href="index.html" aria-label="Back to CampusMade directory">
+        <span class="brand-mark">CM</span>
+        <span>CampusMade</span>
+      </a>
+      <div class="header-actions">
+        <span class="private-badge"><span aria-hidden="true">●</span> Owner admin</span>
+        <a class="header-link" href="https://github.com/rss-coder/studentsbiz" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="button button-dark button-small" href="index.html">View directory <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <section class="admin-intro">
+        <div>
+          <p class="eyebrow">Private management dashboard</p>
+          <h1>Review what goes <span>live.</span></h1>
+          <p>Check every student-business profile for clarity, reliable contact details, and useful ordering information before publishing it.</p>
+        </div>
+        <div class="admin-stat-grid" aria-label="Submission summary">
+          <article class="admin-stat stat-pending"><span>Pending review</span><strong id="pendingStat">0</strong><small>Needs a decision</small></article>
+          <article class="admin-stat"><span>Published</span><strong id="approvedStat">0</strong><small>Added from submissions</small></article>
+          <article class="admin-stat"><span>Rejected</span><strong id="rejectedStat">0</strong><small>Kept for reference</small></article>
+        </div>
+      </section>
+
+      <section class="review-section">
+        <div class="review-heading">
+          <div>
+            <p class="eyebrow">Listing review</p>
+            <h2>Submission queue</h2>
+          </div>
+          <label class="admin-search" for="adminSearch">
+            <span aria-hidden="true">⌕</span>
+            <input id="adminSearch" type="search" placeholder="Search submissions…" autocomplete="off" />
+          </label>
+        </div>
+
+        <div class="review-tabs" id="reviewTabs" role="tablist" aria-label="Submission status filters">
+          <button class="review-tab active" type="button" data-status="Pending">Pending <span id="pendingTabCount">0</span></button>
+          <button class="review-tab" type="button" data-status="Approved">Published <span id="approvedTabCount">0</span></button>
+          <button class="review-tab" type="button" data-status="Rejected">Rejected <span id="rejectedTabCount">0</span></button>
+          <button class="review-tab" type="button" data-status="All">All <span id="allTabCount">0</span></button>
+        </div>
+
+        <div class="review-table-wrap">
+          <div class="review-table-head" aria-hidden="true">
+            <span>Business</span><span>Offer</span><span>Submitted</span><span>Status</span><span></span>
+          </div>
+          <div id="reviewQueue"></div>
+          <div class="admin-empty" id="adminEmpty" hidden>
+            <span aria-hidden="true">✓</span>
+            <h3>Nothing here right now</h3>
+            <p>Try another status or search term.</p>
+          </div>
+        </div>
+
+        <div class="admin-note">
+          <span aria-hidden="true">i</span>
+          <p><strong>Private prototype behavior:</strong> approvals update the directory in this browser, so you can test the full submit-review-publish flow safely.</p>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="admin-dialog" id="reviewDialog" aria-labelledby="reviewBusinessName">
+      <div class="admin-dialog-shell">
+        <div class="admin-dialog-heading">
+          <div>
+            <span class="status-pill" id="editorStatus">Pending</span>
+            <h2 id="reviewBusinessName">Review profile</h2>
+            <p id="reviewMetadata"></p>
+          </div>
+          <button class="icon-button" id="closeReview" type="button" aria-label="Close review">×</button>
+        </div>
+
+        <form id="reviewForm">
+          <div class="form-grid admin-form-grid">
+            <label class="field field-wide"><span>Business name *</span><input name="businessName" required maxlength="45" /></label>
+            <label class="field"><span>Category *</span>
+              <select name="category" required>
+                <option>Food & Drinks</option><option>Fashion & Accessories</option><option>Creative Services</option>
+                <option>Academic & Digital</option><option>Eco & Home</option><option>Personal Care</option>
+              </select>
+            </label>
+            <label class="field"><span>Offering type *</span><select name="type" required><option>Product</option><option>Service</option></select></label>
+            <label class="field field-wide"><span>Description *</span><textarea name="description" required maxlength="150" rows="3"></textarea></label>
+            <label class="field"><span>Starting price *</span><input name="price" required maxlength="25" /></label>
+            <label class="field"><span>Order method *</span>
+              <select name="orderMethod" required><option>Message to order</option><option>Order form</option><option>Booking request</option><option>Pre-order</option></select>
+            </label>
+            <label class="field"><span>Contact / order link *</span><input name="contact" required maxlength="80" /></label>
+            <label class="field"><span>Pickup / delivery</span><input name="fulfillment" maxlength="60" /></label>
+            <label class="field field-wide"><span>Sustainable practice</span><input name="impact" maxlength="100" /></label>
+          </div>
+          <div class="admin-editor-actions">
+            <button class="text-button danger-text" id="deleteSubmission" type="button">Delete listing</button>
+            <div>
+              <button class="button button-ghost" id="rejectSubmission" type="button">Reject</button>
+              <button class="button button-light-outline" type="submit">Save changes</button>
+              <button class="button button-accent" id="approveSubmission" type="button">Approve & publish</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <div class="toast" id="adminToast" role="status" aria-live="polite"></div>
+    <script src="store.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
